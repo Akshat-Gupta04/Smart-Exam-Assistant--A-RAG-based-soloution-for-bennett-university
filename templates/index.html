@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+    <!-- Main chat area -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2><i class="fas fa-comments"></i> Exam Policy Assistant</h2>
+            <div class="chat-tools">
+                <button id="chat-history-btn" class="chat-tool-btn" title="Chat History">
+                    <i class="fas fa-history"></i>
+                </button>
+                <button id="text-to-speech-btn" class="chat-tool-btn" title="Read Aloud">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+
+        <div class="chat-input-container">
+            <div class="typing-indicator" id="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="voice-input-indicator" class="voice-input-indicator">
+                <div class="voice-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <p style="margin: 0; font-weight: 700; color: #4361ee; font-size: 16px;">Listening...</p>
+            </div>
+            <div class="chat-input-wrapper">
+                <textarea id="chat-input" placeholder="Ask about examination policies..." rows="1"></textarea>
+                <div class="chat-input-buttons">
+                    <button id="voice-input-btn" class="input-btn" title="Voice Input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="send-button" class="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="chat-suggestions" id="chat-suggestions">
+                <button class="suggestion-btn">What are the re-evaluation fees?</button>
+                <button class="suggestion-btn">How to apply for a makeup exam?</button>
+                <button class="suggestion-btn">What is the grievance process?</button>
+                <button class="suggestion-btn">When are final exams scheduled?</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context viewer removed as per requirements -->
+</div>
+
+<!-- Processing visualization overlay -->
+<div class="processing-overlay" id="processing-overlay">
+    <div class="processing-container">
+        <div class="processing-animation">
+            <div class="processing-step" id="processingRetrieval">
+                <i class="fas fa-search"></i>
+                <span>Finding Relevant Information</span>
+                <div class="processing-progress">
+                    <div class="progress-bar" id="retrieval-progress"></div>
+                </div>
+            </div>
+            <div class="processing-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="processing-step" id="processingGeneration">
+                <i class="fas fa-brain"></i>
+                <span>Crafting Your Answer</span>
+                <div class="processing-progress">
+                    <div class="progress-bar" id="generation-progress"></div>
+                </div>
+            </div>
+        </div>
+        <div class="processing-details">
+            <p id="processing-status">Processing your question...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Chat history sidebar -->
+<div class="chat-history-sidebar" id="chat-history-sidebar">
+    <div class="chat-history-header">
+        <h3><i class="fas fa-history"></i> Conversation History</h3>
+        <button id="close-history" class="close-btn">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="chat-history-search">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="search-history" placeholder="Search conversations...">
+        </div>
+    </div>
+    <div class="chat-history-items" id="chat-history-items">
+        <!-- Chat history items will be added here dynamically -->
+    </div>
+    <div class="chat-history-actions">
+        <button id="clear-chat" class="history-action-btn">
+            <i class="fas fa-trash-alt"></i> Clear History
+        </button>
+        <button id="export-chat" class="history-action-btn">
+            <i class="fas fa-download"></i> Export
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+<script src="{{ url_for('static', filename='js/voice-input.js') }}"></script>
+<script>
+    // Modern animations for the chat interface
+    document.addEventListener('DOMContentLoaded', function() {
+        // Main container animations
+        gsap.from(".chat-container", {
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            ease: "power3.out"
+        });
+
+        // Chat suggestions animation with stagger
+        gsap.from(".suggestion-btn", {
+            opacity: 0,
+            y: 20,
+            duration: 0.5,
+            stagger: 0.1,
+            delay: 0.5,
+            ease: "back.out(1.7)"
+        });
+
+        // Auto-resize textarea
+        const chatInput = document.getElementById('chat-input');
+
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Ensure voice input button works properly
+        const voiceInputBtn = document.getElementById('voice-input-btn');
+
+        voiceInputBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
+</script>
+{% endblock %}

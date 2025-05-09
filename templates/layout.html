@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Exam Assistant - AI-powered tool for Bennett University examination policies">
+    <meta name="author" content="Akshat Gupta">
+    <meta name="keywords" content="Bennett University, examination, policies, AI assistant, smart exam">
+    <title>Smart Exam Assistant</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="{{ url_for('static', filename='images/bennett.png') }}" alt="Bennett University Logo" class="bennett-logo">
+                </div>
+                <h1>Smart Exam Assistant</h1>
+            </div>
+            <div class="header-controls">
+                <button id="export-chat" class="header-btn" title="Export Chat">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button id="clear-chat" class="header-btn" title="Clear Chat">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                <button id="settings-btn" class="header-btn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button id="theme-toggle" class="header-btn" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#" id="about-link">About</a>
+                    <a href="#" id="help-link">Help</a>
+                    <a href="#" id="privacy-link">Privacy</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>Developed by <strong>Akshat Gupta</strong> &copy; <span id="current-year">2024</span></p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Modal for settings, about, help, and privacy -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">Settings</h2>
+                    <button id="modal-close" class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="modal-body" class="modal-body">
+                    <!-- Modal content will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for About/Help/Settings -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Title</h2>
+                <button id="modal-close" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Initialize GSAP animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Header animation
+            gsap.from(".app-header", {
+                y: -20,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+
+            // Footer animation
+            gsap.from(".app-footer", {
+                y: 20,
+                opacity: 0,
+                duration: 0.8,
+                delay: 0.3,
+                ease: "power3.out"
+            });
+
+            // Logo animation
+            gsap.from(".logo-icon", {
+                scale: 0.8,
+                opacity: 0,
+                duration: 0.8,
+                ease: "back.out(1.7)"
+            });
+
+            gsap.from(".logo h1", {
+                x: -20,
+                opacity: 0,
+                duration: 0.8,
+                delay: 0.2,
+                ease: "power3.out"
+            });
+        });
+    </script>
+</body>
+</html>
