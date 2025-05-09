@@ -299,4 +299,4 @@ Key features visible in the screenshot:
 
 This project is proprietary and confidential. All rights reserved.
 
-© 2024 Akshat Gupta, Bennett University
+© 2025 Akshat Gupta, Bennett University
